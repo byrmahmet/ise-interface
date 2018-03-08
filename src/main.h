@@ -23,7 +23,7 @@ uint8_t ISE_Probe;
 #define ISE_I2C 1
 
 #define ISE_VERSION_REGISTER 0             /*!< version */
-#define ISE_MV_REGISTER 1                  /*!< pH */
+#define ISE_MV_REGISTER 1                  /*!< mV */
 #define ISE_TEMP_REGISTER 5                /*!< temperature in C */
 #define ISE_CALIBRATE_SINGLE_REGISTER 9    /*!< calibration offset */
 #define ISE_CALIBRATE_REFHIGH_REGISTER 13  /*!< reference high calibration */
@@ -37,15 +37,11 @@ uint8_t ISE_Probe;
 
 #define ISE_I2C_ADDRESS_REGISTER 200
 
-#define PROBE_MV_TO_PH 0.0592
-#define TEMP_CORRECTION_FACTOR 0.03
-
 #define adc_disable() (ADCSRA &= ~(1 << ADEN)) // disable ADC (before power-off)
 #define adc_enable() (ADCSRA |=  (1 << ADEN))  // re-enable ADC
 #define ac_disable() ACSR    |= _BV(ACD);      // disable analog comparator
 #define ac_enable() ACSR     &= _BV(ACD)       // enable analog comparator
 #define timer1_disable() PRR |= _BV(PRTIM1)    // disable timer1_disable
-#define INTERNAL2V56_NO_CAP (6)
 
 #define DS18_PIN 5
 OneWire oneWire(DS18_PIN);
@@ -95,7 +91,6 @@ struct rev1_register {
 volatile uint8_t reg_position;
 const uint8_t    reg_size = sizeof(i2c_register);
 
-// bool runpH              = false;
 bool runTemp            = false;
 bool runCalibrateSingle = false;
 bool runCalibrateHigh   = false;
@@ -105,7 +100,6 @@ bool runEEPROM          = false;
 bool runmV              = false;
 bool runReadEEPROM      = false;
 bool runWriteEEPROM     = false;
-
 
 void inline low_power()
 {

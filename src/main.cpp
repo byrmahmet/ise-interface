@@ -1,4 +1,4 @@
-// Copyright (c) 2017 Justin Decker
+// Copyright (c) 2018 Justin Decker
 
 //
 // MIT License
@@ -256,9 +256,11 @@ float measuremV() {
     adcResolution = 2.56;
   }
 
+  // take a reading
   probeIn  = ((readADC(PROBE_IN) * adcResolution) / 1024.0);
   probeRef = ((readADC(PROBE_REF) * adcResolution) / 1024.0);
 
+  // return to high impedance pin state
   digitalWrite(PWM_POWER, LOW);
   pinMode(PWM_POWER, INPUT);
 
