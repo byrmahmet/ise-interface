@@ -1,29 +1,32 @@
-[![Build Status](https://travis-ci.org/u-fire/ph-probe-interface.svg)](https://travis-ci.org/u-fire/ph-probe-interface)
-[![Codacy grade](https://img.shields.io/codacy/grade/7cbfbad007d84cd59d40fc76ddc700a0.svg)]()
+### ISE Probe Interface
 
-### pH Probe Interface
-
-> Measure pH easily
-* pH
-* pOH
-* mV
+> Use any Ion Specific Electrode
+* measure pH with automatic temperature compensation
+* measure ORP and Eh
+* raw mV
 * temperature in Celsius
-
-Available on [Tindie](https://www.tindie.com/products/ufire/ph-probe-interface/)
-
-Make one with the [source code](https://github.com/u-fire/ph-probe-interface) and [schematics](https://upverter.com/ufire/a3c74dc5b3b942a5/pH-Probe-Interface-2018a/).  
+* library can be easily extended for any probe
 
 #### What it is
-An ATTiny85 programmed as an I2C slave, a DS18B20 waterproof temperature probe, and a pH probe. It measures pH in the full range of 0 - 14 and optionally compensates for temperature.
+An I2C slave device that can interface with any voltage based sensor such as a pH or ORP probe. There are pin headers available to connect a DS18B20 temperature sensor for automatic temperature compensation. The firmware on the device provides two calibration options, single or dual point.
 
 #### Using it
-An Arduino-compatible [library](https://github.com/u-fire/pHProbe) is provided to make using the probe easy and there is extensive [documentation](http://ufire.co/pHProbe/) on the use and setup of the device.
+There is extensive [documentation](http://ufire.co/ISE_Probe/) on the use and setup of the device. The library to use it is in the Arduino IDE, Particle.io IDE and a python implementation for Raspberry Pi and MicroPython is also available.
 
 ~~~
-#include <pHProbe.h>
-pH_Probe _pH;
-
-pH = _pH.measurepH();
+#include "uFire_ISE.h"
+ISE_Probe mv;
+mv.measuremV();
+~~~
+~~~
+#include "ISE_pH.h"
+ISE_pH ph;
+ph.measurepH();
+~~~
+~~~
+#include "ISE_ORP.h"
+ISE_ORP orp;
+orp.measureORP();
 ~~~
 
 #### Compiling

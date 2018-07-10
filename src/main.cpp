@@ -116,7 +116,7 @@ void setup()
 
   // if the EEPROM was blank, the user hasn't changed the i2c address, make it
   // the default address.
-  if (ISE_Probe == 0xff)
+  if (static_cast<byte>(ISE_Probe) == 0xff)
   {
     ISE_Probe = ISE_PROBE_DEFAULT_ADDRESS;
   }
@@ -132,7 +132,7 @@ void setup()
 
   i2c_register.version = VERSION;
 
-  TinyWireS.begin(ISE_Probe);
+  TinyWireS.begin(static_cast<byte>(ISE_Probe));
   TinyWireS.onReceive(receiveEvent);
   TinyWireS.onRequest(requestEvent);
 }
@@ -290,8 +290,9 @@ void calibrateSingle()
 {
   i2c_register.single = NAN;
   float v = measuremV();
-  i2c_register.readingHigh = v;
-  i2c_register.single      = (v - i2c_register.solution) / v;
+
+  // i2c_register.readingHigh = v;
+  i2c_register.single = (v - i2c_register.solution) / v;
   EEPROM.put(ISE_CALIBRATE_SINGLE_REGISTER, i2c_register.single);
 }
 
@@ -314,8 +315,9 @@ void calibrateHigh()
 void setI2CAddress()
 {
   // for convenience, the solution register is used to send the address
-  EEPROM.put(ISE_I2C_ADDRESS_REGISTER, i2c_register.solution);
-  TinyWireS.begin(i2c_register.solution);
+  EEPROM.put(ISE_I2C_ADDRESS_REGISTER, static_cast<byte>(i2c_register.solution));
+  ISE_Probe = static_cast<byte>(i2c_register.solution);
+  TinyWireS.begin(static_cast<byte>(i2c_register.solution));
 }
 
 void saveEEPROM()
